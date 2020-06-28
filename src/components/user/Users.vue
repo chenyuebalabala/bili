@@ -249,7 +249,7 @@ export default {
     async getUserList () {
       const { data: res } = await this.$http.get('users', { params: this.queryInfo })
       if (res.meta.status !== 200) {
-        console.log(res+'11111111111111111111')
+        console.log(res + '11111111111111111111')
         return this.$message.error('获取用户列表失败！')
       }
       this.userlist = res.data.users
@@ -315,15 +315,15 @@ export default {
     },
     // 修改用户信息并提交
     editUserInfo () {
-      this.$refs.editFormRef.validate(valid => {
+      this.$refs.editFormRef.validate(async valid => {
         console.log(valid)
         if (!valid) return
         // 发起修改用户信息的数据请求
-        const {data: res} = await this.$http.put('users/'+ this.editForm.id, {
+        const { data: res } = await this.$http.put('users/' + this.editForm.id, {
           email: this.editForm.email,
           mobile: this.editForm.mobile
         })
-        if(res.meta.status !== 200){
+        if (res.meta.status !== 200) {
           return this.$message.error('更新用户信息失败！')
         }
         // 关闭对话框
@@ -335,24 +335,24 @@ export default {
       })
     },
     // 根据id删除对应的用户信息
-    async removeUserById(id){
+    async removeUserById (id) {
       // 弹框询问用户是否删除数据
-        const confirmResult = await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).catch(err => err)
-        // 如果用户确认删除，则返回值为字符串  confirm
-        //如果用户取消了删除，则返回值为字符串 cancel
-        if(confirmResult !== 'confirm'){
-          return this.$message.info('已取消删除')
-        }
-        const {data:res} = await this.$http.delete('users/' + id)
-        if(res.meta.status !== 200){
-          return this.$message.error('删除用户失败！')
-        }
-        this.$message.success('删除用户成功！')
-        this.getUserList()
+      const confirmResult = await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).catch(err => err)
+      // 如果用户确认删除，则返回值为字符串  confirm
+      // 如果用户取消了删除，则返回值为字符串 cancel
+      if (confirmResult !== 'confirm') {
+        return this.$message.info('已取消删除')
+      }
+      const { data: res } = await this.$http.delete('users/' + id)
+      if (res.meta.status !== 200) {
+        return this.$message.error('删除用户失败！')
+      }
+      this.$message.success('删除用户成功！')
+      this.getUserList()
     }
   }
 }
